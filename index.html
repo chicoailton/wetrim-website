@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WeTrim | Flight Dynamics, Simulation & Control</title>
+
+<meta
+    name="description"
+    content="WeTrim develops custom flight dynamics models, real-time simulators, aerodynamic models and control systems for aircraft, airships, UAVs and unconventional vehicles."
+>
+
+<style>
+
+/* =========================================================
+   COLORS
+   ========================================================= */
+
+:root{
+    --white:#FFFFFF;
+    --light:#F4F9FC;
+    --light-blue:#EDF7FC;
+
+    --text:#102A3C;
+    --muted:#5E7B8E;
+
+    --line:#C9DFEC;
+
+    --accent:#20B7F5;
+    --accent2:#63D5FF;
+
+    --max:1180px;
+}
+
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:#FFFFFF;
+    color:var(--text);
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height:1.55;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+.wrap{
+    width:min(calc(100% - 40px),var(--max));
+    margin:auto;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+nav{
+    position:fixed;
+
+    top:0;
+    left:0;
+    right:0;
+
+    z-index:100;
+
+    height:88px;
+
+    background:#FFFFFF;
+
+    border-bottom:1px solid #E5EEF3;
+}
+
+.navin{
+    height:88px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+
+/* =========================================================
+   BRAND / LOGO
+   ========================================================= */
+
+.brand-block{
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+
+    line-height:1;
+
+    color:#102A3C;
+}
+
+
+/* WeTrim */
+
+.brand{
+    display:block;
+
+    font-size:27px;
+    font-weight:850;
+
+    letter-spacing:-1.3px;
+
+    line-height:1;
+
+    margin-bottom:6px;
+}
+
+.brand span{
+    color:var(--accent);
+}
+
+
+/* FLIGHT SIMULATION */
+
+.brand-subtitle{
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:.15em;
+
+    color:#294D63;
+
+    text-transform:uppercase;
+
+    line-height:1.1;
+
+    margin-bottom:4px;
+}
+
+
+/* GUIDANCE NAVIGATION CONTROL */
+
+.brand-detail{
+    font-size:8px;
+
+    font-weight:600;
+
+    letter-spacing:.16em;
+
+    color:#7894A5;
+
+    text-transform:uppercase;
+
+    line-height:1;
+}
+
+
+/* =========================================================
+   NAV LINKS
+   ========================================================= */
+
+.links{
+    display:flex;
+
+    gap:28px;
+
+    align-items:center;
+
+    font-size:14px;
+
+    color:#456477;
+}
+
+.links a{
+    transition:color .2s ease;
+}
+
+.links a:hover{
+    color:#102A3C;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:12px 18px;
+
+    border-radius:8px;
+
+    border:1px solid var(--line);
+
+    font-weight:650;
+    font-size:14px;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn.primary{
+    background:var(--accent);
+
+    color:#052235;
+
+    border-color:var(--accent);
+
+    box-shadow:
+        0 8px 25px rgba(32,183,245,.18);
+}
+
+.btn.primary:hover{
+    background:var(--accent2);
+}
+
+.btn.secondary{
+    background:rgba(255,255,255,.92);
+
+    color:#12364B;
+
+    border-color:#FFFFFF;
+}
+
+.btn.secondary:hover{
+    background:#FFFFFF;
+}
+
+
+/* NAV BUTTON */
+
+nav .btn{
+    color:#17394D;
+
+    background:#FFFFFF;
+
+    border-color:#BCD7E6;
+}
+
+nav .btn:hover{
+    border-color:#7FC8EB;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+    position:relative;
+
+    width:100%;
+
+    /*
+       Header is now 88px because the logo
+       contains two additional lines.
+    */
+
+    margin-top:88px;
+
+    aspect-ratio:1920 / 768;
+
+    min-height:0;
+
+    padding:0;
+
+    display:flex;
+    align-items:center;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    background:#FFFFFF;
+}
+
+
+/* =========================================================
+   HERO IMAGE
+   ========================================================= */
+
+.hero-image{
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:fill;
+
+    display:block;
+
+    z-index:-3;
+}
+
+
+/* =========================================================
+   HERO OVERLAY
+   ========================================================= */
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:-2;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            90deg,
+
+            rgba(3,28,46,.45) 0%,
+
+            rgba(3,28,46,.34) 16%,
+
+            rgba(3,28,46,.20) 29%,
+
+            rgba(3,28,46,.08) 42%,
+
+            rgba(3,28,46,0) 57%
+        );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.hero .wrap{
+    position:relative;
+    z-index:5;
+}
+
+.hero-content{
+    width:52%;
+    max-width:650px;
+}
+
+
+/* =========================================================
+   HERO EYEBROW
+   ========================================================= */
+
+.eyebrow{
+    display:inline-flex;
+
+    gap:9px;
+
+    align-items:center;
+
+    color:#69DCFF;
+
+    font-size:12px;
+
+    font-weight:750;
+
+    letter-spacing:.14em;
+
+    text-transform:uppercase;
+
+    margin-bottom:5px;
+
+    text-shadow:
+        0 2px 8px rgba(0,20,40,.25);
+}
+
+.dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#35C6FF;
+
+    box-shadow:
+        0 0 15px rgba(47,195,255,.8);
+}
+
+
+/* =========================================================
+   HERO TITLE
+   ========================================================= */
+
+.hero h1{
+    color:#FFFFFF;
+
+    font-size:clamp(46px,5vw,70px);
+
+    line-height:.98;
+
+    letter-spacing:-.05em;
+
+    margin:22px 0 26px;
+
+    max-width:620px;
+
+    text-shadow:
+        0 3px 20px rgba(0,25,45,.25);
+}
+
+.gradient{
+    background:
+        linear-gradient(
+            90deg,
+            #65DEFF,
+            #20B7F5
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.we-black{
+    color:#000000;
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+   ========================================================= */
+
+.lead{
+    font-size:17px;
+
+    line-height:1.55;
+
+    color:rgba(255,255,255,.97);
+
+    max-width:610px;
+
+    margin-bottom:30px;
+
+    text-shadow:
+        0 2px 10px rgba(0,20,35,.30);
+}
+
+
+/* =========================================================
+   HERO ACTIONS
+   ========================================================= */
+
+.actions{
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+}
+
+.actions .btn{
+    padding:13px 20px;
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+   ========================================================= */
+
+section:not(.hero){
+    padding:105px 0;
+    border:0;
+}
+
+.kicker{
+    color:#149EDB;
+
+    font-size:13px;
+
+    font-weight:750;
+
+    letter-spacing:.13em;
+
+    text-transform:uppercase;
+}
+
+.section-title{
+    color:#102A3C;
+
+    font-size:clamp(36px,5vw,58px);
+
+    line-height:1.06;
+
+    letter-spacing:-.04em;
+
+    margin:15px 0 18px;
+
+    max-width:780px;
+}
+
+.section-intro{
+    color:#5E7B8E;
+
+    font-size:18px;
+
+    max-width:690px;
+}
+
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+#services{
+    background:#FFFFFF;
+}
+
+.cards{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:16px;
+
+    margin-top:52px;
+}
+
+.card{
+    background:#FFFFFF;
+
+    border:1px solid #D4E5EF;
+
+    border-radius:14px;
+
+    padding:28px;
+
+    min-height:235px;
+
+    box-shadow:
+        0 8px 30px rgba(25,80,110,.06);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+
+    border-color:#5DCBFA;
+
+    box-shadow:
+        0 15px 40px rgba(25,100,140,.10);
+}
+
+.num{
+    font-family:monospace;
+
+    color:#149EDB;
+
+    font-size:12px;
+}
+
+.card h3{
+    color:#102A3C;
+
+    font-size:21px;
+
+    margin:32px 0 10px;
+}
+
+.card p{
+    color:#668194;
+
+    font-size:15px;
+
+    margin:0;
+}
+
+
+/* =========================================================
+   APPROACH
+   ========================================================= */
+
+#approach{
+    background:#EDF7FC;
+}
+
+.process{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:1px;
+
+    background:#D1E4EF;
+
+    border:1px solid #D1E4EF;
+
+    margin-top:50px;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 30px rgba(25,80,110,.05);
+}
+
+.step{
+    background:#FFFFFF;
+
+    padding:30px;
+}
+
+.step strong{
+    display:block;
+
+    color:#102A3C;
+
+    font-size:16px;
+
+    margin:22px 0 8px;
+}
+
+.step p{
+    color:#668194;
+
+    font-size:14px;
+
+    margin:0;
+}
+
+
+/* =========================================================
+   TECHNOLOGY
+   ========================================================= */
+
+#technology{
+    background:#FFFFFF;
+}
+
+.bigline{
+    color:#102A3C;
+
+    font-size:clamp(38px,5vw,70px);
+
+    line-height:1.06;
+
+    letter-spacing:-.045em;
+
+    max-width:950px;
+}
+
+.bigline em{
+    font-style:normal;
+
+    color:#18A9E8;
+}
+
+.vehicles{
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin-top:35px;
+}
+
+.pill{
+    border:1px solid #C5DFEC;
+
+    padding:9px 13px;
+
+    border-radius:99px;
+
+    color:#365E74;
+
+    font-size:13px;
+
+    background:#F8FCFE;
+}
+
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
+.cta{
+    text-align:center;
+
+    padding:120px 0 !important;
+
+    background:#EDF7FC;
+}
+
+.cta .section-title{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.cta p{
+    margin:0 auto 32px;
+
+    color:#5E7B8E;
+
+    max-width:600px;
+
+    font-size:18px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer{
+    background:#FFFFFF;
+
+    border-top:1px solid #E1ECF2;
+
+    padding:30px 0 45px;
+
+    color:#688496;
+
+    font-size:13px;
+}
+
+footer .brand{
+    color:#102A3C;
+}
+
+.foot{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+.mono{
+    font-family:monospace;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media(max-width:900px){
+
+    .links a:not(.btn){
+        display:none;
+    }
+
+    .hero{
+        aspect-ratio:auto;
+
+        min-height:820px;
+
+        align-items:flex-end;
+
+        padding-bottom:60px;
+    }
+
+    .hero-image{
+        object-fit:cover;
+        object-position:center;
+    }
+
+    .hero::after{
+        background:
+            linear-gradient(
+                0deg,
+
+                rgba(3,28,46,.76) 0%,
+
+                rgba(3,28,46,.58) 32%,
+
+                rgba(3,28,46,.22) 60%,
+
+                rgba(3,28,46,0) 82%
+            );
+    }
+
+    .hero-content{
+        width:100%;
+        max-width:650px;
+    }
+
+    .hero h1{
+        font-size:clamp(46px,10vw,64px);
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .process{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .foot{
+        flex-direction:column;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:520px){
+
+    .wrap{
+        width:min(calc(100% - 26px),var(--max));
+    }
+
+    nav{
+        height:78px;
+    }
+
+    .navin{
+        height:78px;
+    }
+
+    .brand{
+        font-size:22px;
+        margin-bottom:5px;
+    }
+
+    .brand-subtitle{
+        font-size:8px;
+    }
+
+    .brand-detail{
+        font-size:6.5px;
+    }
+
+    .hero{
+        margin-top:78px;
+
+        min-height:760px;
+
+        padding-bottom:50px;
+    }
+
+    .hero h1{
+        font-size:46px;
+    }
+
+    .lead{
+        font-size:16px;
+    }
+
+    .process{
+        grid-template-columns:1fr;
+    }
+
+    .links{
+        gap:10px;
+    }
+
+    nav .btn{
+        padding:9px 12px;
+
+        font-size:12px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     NAVIGATION
+     ====================================================== -->
+
+<nav>
+
+<div class="wrap navin">
+
+
+    <!-- NEW WETRIM BRAND -->
+
+    <a class="brand-block" href="#">
+
+        <span class="brand">
+            We<span>Trim</span>
+        </span>
+
+        <span class="brand-subtitle">
+            Flight Simulation
+        </span>
+
+        <span class="brand-detail">
+            Guidance · Navigation · Control
+        </span>
+
+    </a>
+
+
+    <div class="links">
+
+        <a href="#services">
+            Services
+        </a>
+
+        <a href="#approach">
+            Approach
+        </a>
+
+        <a href="#technology">
+            Technology
+        </a>
+
+        <a
+            class="btn"
+            href="mailto:hello@wetrim.fr"
+        >
+            Start a project
+        </a>
+
+    </div>
+
+
+</div>
+
+</nav>
+
+
+
+<main>
+
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+
+<section class="hero">
+
+
+    <img
+        class="hero-image"
+        src="assets/drone.png"
+        alt="WeTrim flight dynamics and UAV simulation"
+    >
+
+
+    <div class="wrap">
+
+
+        <div class="hero-content">
+
+
+            <div class="eyebrow">
+
+                <span class="dot"></span>
+
+                Flight Dynamics · Simulation · Control
+
+            </div>
+
+
+
+            <h1>
+
+                We model.<br>
+
+                We simulate.<br>
+
+                <span class="we-black">We</span> <span class="gradient">Trim.</span>
+
+            </h1>
+
+
+
+            <p class="lead">
+
+                High-fidelity engineering simulators for aircraft,
+                airships, UAVs and unconventional vehicles —
+                from aerodynamic modelling to real-time flight
+                dynamics and control.
+
+            </p>
+
+
+
+            <div class="actions">
+
+
+                <a
+                    class="btn primary"
+                    href="#contact"
+                >
+                    Discuss your project →
+                </a>
+
+
+                <a
+                    class="btn secondary"
+                    href="#services"
+                >
+                    Explore capabilities
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ======================================================
+     SERVICES
+     ====================================================== -->
+
+<section id="services">
+
+<div class="wrap">
+
+
+    <div class="kicker">
+        Capabilities
+    </div>
+
+
+    <h2 class="section-title">
+        From physics to a simulator you can fly.
+    </h2>
+
+
+    <p class="section-intro">
+
+        We build tailored simulation environments around your vehicle,
+        your aerodynamic data and your engineering objectives.
+
+    </p>
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <span class="num">
+                01 / AERO
+            </span>
+
+            <h3>
+                Aerodynamic Modelling
+            </h3>
+
+            <p>
+                CFD-informed aerodynamic databases,
+                coefficient models, interpolation,
+                force and moment reconstruction,
+                and model validation.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="num">
+                02 / 6DOF
+            </span>
+
+            <h3>
+                Flight Dynamics
+            </h3>
+
+            <p>
+                Nonlinear 6-DOF equations of motion,
+                atmosphere, wind, propulsion,
+                mass properties, actuators and
+                vehicle-specific physics.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="num">
+                03 / GNC
+            </span>
+
+            <h3>
+                Control & Allocation
+            </h3>
+
+            <p>
+                Control-law prototyping,
+                PID and cascaded architectures,
+                actuator allocation,
+                trim analysis and
+                closed-loop evaluation.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="num">
+                04 / SIM
+            </span>
+
+            <h3>
+                Real-Time Simulation
+            </h3>
+
+            <p>
+                Interactive simulators with
+                pilot inputs, real-time pacing,
+                telemetry and 3D visualization
+                for engineering and demonstration.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="num">
+                05 / V&V
+            </span>
+
+            <h3>
+                Model Validation
+            </h3>
+
+            <p>
+                Simulation-to-flight comparison,
+                parameter tuning,
+                sensitivity studies and
+                progressive model improvement
+                using test data.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="num">
+                06 / SIL · HIL
+            </span>
+
+            <h3>
+                Integration & Testing
+            </h3>
+
+            <p>
+                Engineering environments designed
+                to evolve toward SIL and HIL
+                workflows, autopilot integration
+                and control-system testing.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- ======================================================
+     APPROACH
+     ====================================================== -->
+
+<section id="approach">
+
+<div class="wrap">
+
+
+    <div class="kicker">
+        Engineering workflow
+    </div>
+
+
+    <h2 class="section-title">
+        One continuous model-development loop.
+    </h2>
+
+
+    <div class="process">
+
+
+        <div class="step">
+
+            <span class="num">01</span>
+
+            <strong>
+                Understand
+            </strong>
+
+            <p>
+                Vehicle architecture,
+                available data,
+                requirements and
+                simulation objectives.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <span class="num">02</span>
+
+            <strong>
+                Model
+            </strong>
+
+            <p>
+                Aerodynamics,
+                propulsion,
+                environment,
+                actuators and
+                equations of motion.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <span class="num">03</span>
+
+            <strong>
+                Simulate
+            </strong>
+
+            <p>
+                Trim,
+                open-loop dynamics,
+                closed-loop control
+                and real-time interaction.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <span class="num">04</span>
+
+            <strong>
+                Validate
+            </strong>
+
+            <p>
+                Compare against CFD,
+                flight-test or
+                experimental data
+                and iterate.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- ======================================================
+     TECHNOLOGY
+     ====================================================== -->
+
+<section id="technology">
+
+<div class="wrap">
+
+
+    <div class="kicker">
+        Built for unconventional flight
+    </div>
+
+
+    <p class="bigline">
+
+        Not every vehicle fits inside a conventional aircraft model.
+
+        We build the simulation around
+
+        <em>
+            your physics.
+        </em>
+
+    </p>
+
+
+    <div class="vehicles">
+
+        <span class="pill">
+            Aircraft
+        </span>
+
+        <span class="pill">
+            Airships
+        </span>
+
+        <span class="pill">
+            UAVs
+        </span>
+
+        <span class="pill">
+            eVTOL
+        </span>
+
+        <span class="pill">
+            Experimental Vehicles
+        </span>
+
+        <span class="pill">
+            Research Platforms
+        </span>
+
+    </div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ======================================================
+     CONTACT
+     ====================================================== -->
+
+<section class="cta" id="contact">
+
+<div class="wrap">
+
+
+    <div class="kicker">
+        Start a project
+    </div>
+
+
+    <h2 class="section-title">
+
+        Have a vehicle.<br>
+
+        Need its digital dynamics?
+
+    </h2>
+
+
+    <p>
+
+        Tell us what you are building,
+        what data you already have
+        and what you need to simulate.
+
+    </p>
+
+
+    <a
+        class="btn primary"
+        href="mailto:hello@wetrim.fr?subject=Simulation%20Project"
+    >
+        hello@wetrim.fr →
+    </a>
+
+
+</div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- ======================================================
+     FOOTER
+     ====================================================== -->
+
+<footer>
+
+<div class="wrap foot">
+
+
+    <div>
+
+        <span class="brand">
+            We<span>Trim</span>
+        </span>
+
+        <br>
+
+        Flight Simulation · Guidance · Navigation · Control
+
+    </div>
+
+
+    <div class="mono">
+        © 2026 WeTrim Engineering
+    </div>
+
+
+</div>
+
+</footer>
+
+
+</body>
+
+</html>
