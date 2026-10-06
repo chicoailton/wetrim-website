@@ -949,12 +949,46 @@ footer .brand{
             Technology
         </a>
 
-        <a
-            class="btn"
-            href="mailto:hello@wetrim.fr"
+       <form
+    action="https://formspree.io/f/mzedddwk"
+    method="POST"
+    class="contact-form"
+>
+
+    <div class="form-row">
+        <input
+            type="text"
+            name="name"
+            placeholder="Your name"
+            required
         >
-            Start a project
-        </a>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Your email"
+            required
+        >
+    </div>
+
+    <input
+        type="text"
+        name="company"
+        placeholder="Company"
+    >
+
+    <textarea
+        name="message"
+        placeholder="Tell us about your vehicle and what you need to simulate..."
+        rows="5"
+        required
+    ></textarea>
+
+    <button type="submit" class="btn primary">
+        Send project →
+    </button>
+
+</form>
 
     </div>
 
