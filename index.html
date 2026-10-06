@@ -740,6 +740,76 @@ section:not(.hero){
     font-size:18px;
 }
 
+    .cta p{
+    margin:0 auto 32px;
+
+    color:#5E7B8E;
+
+    max-width:600px;
+
+    font-size:18px;
+}
+
+
+/* CONTACT FORM */
+
+.contact-form{
+    width:min(100%,700px);
+    margin:0 auto;
+
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.contact-form input,
+.contact-form textarea{
+    width:100%;
+    padding:15px 17px;
+
+    border:1px solid #C9DFEC;
+    border-radius:8px;
+
+    background:#FFFFFF;
+    color:#102A3C;
+
+    font:inherit;
+    font-size:15px;
+    outline:none;
+}
+
+.contact-form textarea{
+    resize:vertical;
+    min-height:140px;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder{
+    color:#7894A5;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus{
+    border-color:#20B7F5;
+    box-shadow:0 0 0 3px rgba(32,183,245,.12);
+}
+
+.contact-form .btn{
+    align-self:center;
+    margin-top:6px;
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 /* =========================================================
    FOOTER
@@ -896,6 +966,10 @@ footer .brand{
         padding:9px 12px;
 
         font-size:12px;
+    }
+
+    .form-row{
+    grid-template-columns:1fr;
     }
 }
 
